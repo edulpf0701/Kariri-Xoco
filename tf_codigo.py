@@ -3,7 +3,7 @@ import random
 import os
 
 import spacy
-nlp = spacy.load("pt_core_news_sm")
+nlp = spacy.load("pt_core_news_md")
 
 
 def limpar_tela():
@@ -14,11 +14,13 @@ def dicionario_kx_pt(texto_kx, texto_pt):
     palavras_kx = texto_kx.lower().split()
     palavras_pt = texto_pt.lower().split()
 
-    dicionario = dict(zip(palavras_kx, palavras_pt))
-
+    dicionario = (dict(zip(palavras_kx, palavras_pt)))
+ 
+    
     for palavra, traducao in sorted(dicionario.items()):
         print(f"{palavra} = {traducao}")
-       
+   
+    
     while True:
         resposta = input(' \n Selecione uma opção \n1: Desafio \n2: Tradutor  \n3: Sair \n>')
     
@@ -39,7 +41,26 @@ def dicionario_kx_pt(texto_kx, texto_pt):
             print('Opção inválida\n')
     
     
-    return dict(zip(palavras_kx, palavras_pt))
+    return inspetor(dicionario)
+    
+def inspetor(dicionario):
+	 
+	mapeamento = {
+		'da': 'de a',
+		'do': 'de o',
+		'na': 'em a',
+		'no': 'em o',
+		'pelo': 'por o',
+		'pela': 'por a'
+		}
+	novo_dic = {}
+	for palavra, traducao in dicionario.items():
+		nova = mapeamento.get(palavra, palavra)
+		novo_dic[nova] = traducao
+	
+	return novo_dic
+
+
     
     
 def dicionario_pt_kx(texto_pt, texto_kx):
@@ -49,10 +70,8 @@ def dicionario_pt_kx(texto_pt, texto_kx):
 
     dicionario = dict(zip(palavras_pt, palavras_kx))
     
-    for palavra, traducao in sorted(dicionario.items()):
-        print(f"{palavra} = {traducao}")
 
-    return dict(zip(palavras_pt, palavras_kx))
+    return inspetor(dicionario)
 
 def desafio():
 	limpar_tela()
@@ -138,22 +157,9 @@ def desafio():
 
 def iniciar_tradutor():
 	limpar_tela()
-	
-	while True:
-		modo = input('Escolha uma opção: \n1:Tradutor Kariri-Xocó → Português \n2: Tradutor Português → Kariri-Xocó \n>')
-	
-		if modo == '1':
-			dic_kx_pt = dicionario_kx_pt(texto_kx, texto_pt)
-			tradutor_kx_pt(dic_kx_pt)
-			break
-		elif modo == '2':
-			dic_pt_kx = dicionario_pt_kx(texto_pt, texto_kx)
-			tradutor_pt_kx(dic_pt_kx)
-			break
-	else:
-		limpar_tela()
-		print('Opção inválida\n')
-
+	dic_pt_kx = dicionario_pt_kx(texto_pt, texto_kx)
+	tradutor_pt_kx(dic_pt_kx)
+			
 
 
 def tradutor_pt_kx(dic_pt_kx):
@@ -163,31 +169,48 @@ def tradutor_pt_kx(dic_pt_kx):
 	traducao = []
 	for token in tokens:
 		lemma = token.lemma_.lower()
+		print("=> ", token, lemma, lemma in dic_pt_kx)
 		if lemma in dic_pt_kx:
 			traducao.append(dic_pt_kx[lemma])
 		else:
          		traducao.append(f"[{token.text}]")
-
+	
 	print('Tradução:')
 	print(" ".join(traducao))
+
 	
 	while True:
 		repetir = input('\nDeseja fazer outra tradução? (sim/não): ').strip().lower()
 		if repetir == 'sim':
-			continue
+			tradutor_pt_kx(dic_pt_kx)
 		elif repetir == 'não':
-			print("Ynatekié! Até outra hora")
-			break      
+			escolha = input('Qual modo deseja utilizar? \n1: Dicionário Kariri-Xocó → Português \n2: Desafio \n3: Tradutor \n4: Sair \n>')
+			
+			if escolha == '1':
+				dicionario_kx_pt(texto_kx, texto_pt)
+				break
+				
+			elif escolha == '2':
+				desafio()
+				break
+			
+			elif escolha == '3':
+				iniciar_tradutor()
+				break
+				
+			elif escolha == '4':
+				print("Ynatekié! Até outra hora")
+				break
+			
+			else:
+				limpar_tela()
+				print('Opção inválida\n')
+		
 		else:
      			limpar_tela()
      			print('Opção inválida\n')
 
 	
-def tradutor_kx_pt(dic_kx_pt):
-	limpar_tela()
-	print(dicionario_pt_kx(texto_pt, texto_kx))
-
-
 
 
 limpar_tela()
