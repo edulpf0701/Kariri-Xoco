@@ -163,26 +163,27 @@ def iniciar_tradutor():
 
 
 def tradutor_pt_kx(dic_pt_kx):
-	limpar_tela()
-	texto = input('Digite um texto em português que gostaria de traduzir: \n>')
-	tokens = nlp(texto)
-	traducao = []
-	for token in tokens:
-		lemma = token.lemma_.lower()
-		print("=> ", token, lemma, lemma in dic_pt_kx)
-		if lemma in dic_pt_kx:
-			traducao.append(dic_pt_kx[lemma])
-		else:
-         		traducao.append(f"[{token.text}]")
-	
-	print('Tradução:')
-	print(" ".join(traducao))
-
-	
 	while True:
+		limpar_tela()
+		texto = input('Digite um texto em português que gostaria de traduzir: \n>')
+		tokens = nlp(texto)
+		traducao = []
+		for token in tokens:
+			lemma = token.lemma_.lower()
+			print("=> ", token, lemma, lemma in dic_pt_kx)
+			if lemma in dic_pt_kx:
+				traducao.append(dic_pt_kx[lemma])
+			else:
+		 		traducao.append(f"[{token.text}]")
+		
+		print('Tradução:')
+		print(" ".join(traducao))
+
+
+
 		repetir = input('\nDeseja fazer outra tradução? (sim/não): ').strip().lower()
 		if repetir == 'sim':
-			tradutor_pt_kx(dic_pt_kx)
+			continue
 		elif repetir == 'não':
 			escolha = input('Qual modo deseja utilizar? \n1: Dicionário Kariri-Xocó → Português \n2: Desafio \n3: Tradutor \n4: Sair \n>')
 			
@@ -207,10 +208,10 @@ def tradutor_pt_kx(dic_pt_kx):
 				print('Opção inválida\n')
 		
 		else:
-     			limpar_tela()
-     			print('Opção inválida\n')
+			limpar_tela()
+			print('Opção inválida\n')
 
-	
+
 
 
 limpar_tela()
@@ -232,7 +233,3 @@ while True:
 	else:
 		limpar_tela()
 		print('Opção inválida\n')
-		
-		
-		
-		
