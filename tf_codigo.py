@@ -170,7 +170,7 @@ def tradutor_pt_kx(dic_pt_kx):
 		traducao = []
 		for token in tokens:
 			lemma = token.lemma_.lower()
-			print("=> ", token, lemma, lemma in dic_pt_kx)
+			
 			if lemma in dic_pt_kx:
 				traducao.append(dic_pt_kx[lemma])
 			else:
